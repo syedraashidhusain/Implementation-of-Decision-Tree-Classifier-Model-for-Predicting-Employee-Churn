@@ -1,117 +1,66 @@
-# Implementation-of-Decision-Tree-Classifier-Model-for-Predicting-Employee-Churn
+# Implementation-of-Decision-Tree-Regressor-Model-for-Predicting-the-Salary-of-the-Employee
 
 ## AIM:
-To write a program to implement the Decision Tree Classifier Model for Predicting Employee Churn.
+To write a program to implement the Decision Tree Regressor Model for Predicting the Salary of the Employee.
 
 ## Equipments Required:
 1. Hardware – PCs
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-Step 1: Import Required Libraries
+#### 1. Load Data – Read Salary.csv into a pandas DataFrame.
 
-Import pandas, matplotlib, and sklearn modules for data handling, visualization, and ML.
+#### 2. Select Features & Target – Use Level as input (X) and Salary as output (y).
 
-Step 2: Load Dataset
+#### 3. Split Data (optional) – Here dataset is small; we’ll train on full data.
 
-Read Employee.csv using pandas.read_csv().
+#### 4. Train Model – Fit a DecisionTreeRegressor on X and y.
 
-Step 3: Identify Target and Features
+#### 5. Predict – Predict Salary for a given Level.
 
-Target column → left (1 = employee left, 0 = stayed).
-
-Features → satisfaction_level, last_evaluation, number_project, average_montly_hours, time_spend_company, Work_accident, promotion_last_5years, Departments, salary.
-
-Step 4: Preprocess Data
-
-Encode categorical variables (Departments, salary) into numeric values using Label Encoding.
-
-Ensure no missing values exist.
-
-Step 5: Split Dataset
-
-Divide dataset into training set (70%) and testing set (30%) using train_test_split.
-
-Step 6: Build Decision Tree Classifier
-
-Initialize DecisionTreeClassifier with criterion = "entropy" (or "gini") and a maximum depth to prevent overfitting.
-
-Train (fit) the model using training data.
-
-Step 7: Make Predictions
-
-Use the trained model to predict on the test data.
-
-Step 8: Evaluate the Model
-
-Measure performance using:
-
-Accuracy Score
-
-Confusion Matrix
-
-Classification Report (Precision, Recall, F1-Score).
-
-Step 9: Visualize the Decision Tree
-
-Plot the decision tree using sklearn.tree.plot_tree to understand the decision rules.
-
+#### 6. Visualize (optional) – Plot predicted salary vs. level to see the tree regression steps.
 ## Program:
 ```python
-Program to implement the Decision Tree Classifier Model for Predicting Employee Churn.
-Developed by: M syed rasshid husain
-RegisterNumber: 25009038
+Program to implement the Decision Tree Regressor Model for Predicting the Salary of the Employee.
+Developed by: M syed raashid husain
+RegisterNumber: 25016505
 
-# Step 1: Import libraries
 import pandas as pd
+from sklearn.tree import DecisionTreeRegressor
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier, plot_tree
-from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+import numpy as np
 
-# Step 2: Load dataset
-df = pd.read_csv(r"C:\Users\israv\Downloads\employee.csv")
+# Step 1: Load dataset
+data = pd.read_csv(r'C:\Users\acer\Downloads\Salary.csv.csv')
 
-# Step 3: Preprocessing
-# Target column is 'left'
-X = df.drop("left", axis=1)
-y = df["left"]
+# Step 2: Select features and target
+X = data[['Level']]  # Independent variable
+y = data['Salary']   # Dependent variable
 
-# Encode categorical variables (Departments, salary)
-for col in X.columns:
-    if X[col].dtype == "object":
-        le = LabelEncoder()
-        X[col] = le.fit_transform(X[col])
+# Step 3: Train Decision Tree Regressor
+model = DecisionTreeRegressor(random_state=0)
+model.fit(X, y)
 
-# Step 4: Train/Test Split
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=42
-)
+# Step 4: Predict Salary for a specific Level
+level_to_predict = 6.5  # example
+predicted_salary = model.predict([[level_to_predict]])
+print(f"Predicted Salary for Level {level_to_predict}: {predicted_salary[0]}")
 
-# Step 5: Train Decision Tree Classifier
-clf = DecisionTreeClassifier(criterion="entropy", max_depth=5, random_state=42)
-clf.fit(X_train, y_train)
-
-# Step 6: Predictions
-y_pred = clf.predict(X_test)
-
-# Step 7: Evaluation
-print("✅ Accuracy:", accuracy_score(y_test, y_pred))
-print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
-print("\nClassification Report:\n", classification_report(y_test, y_pred))
-
-# Step 8: Visualization
-plt.figure(figsize=(20,10))
-plot_tree(clf, feature_names=X.columns, class_names=["Stay","Left"], filled=True)
+# Step 5: Visualize results
+X_grid = np.arange(min(X.Level), max(X.Level), 0.01).reshape(-1,1)
+plt.scatter(X, y, color='red', label='Actual Salary')
+plt.plot(X_grid, model.predict(X_grid), color='blue', label='Predicted Salary')
+plt.title('Decision Tree Regression Model')
+plt.xlabel('Level')
+plt.ylabel('Salary')
+plt.legend()
 plt.show()
 
 ```
 
 ## Output:
-<img width="514" height="341" alt="Screenshot 2025-09-26 202417" src="https://github.com/user-attachments/assets/b88837e8-5c04-4c31-8b3c-37ce5cd0c150" />
-<img width="1395" height="664" alt="Screenshot 2025-09-26 202449" src="https://github.com/user-attachments/assets/7c523f60-ef42-4f27-829d-faf38fe71555" />
+<img width="791" height="615" alt="image" src="https://github.com/user-attachments/assets/0a46712d-e8b6-4588-af0b-b5c7590100c6" />
 
 
 ## Result:
-Thus the program to implement the  Decision Tree Classifier Model for Predicting Employee Churn is written and verified using python programming.
+Thus the program to implement the Decision Tree Regressor Model for Predicting the Salary of the Employee is written and verified using python programming.
